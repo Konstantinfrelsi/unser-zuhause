@@ -31,9 +31,9 @@
   --gold-mist:     #fefaf3;
 
   /* ── Magnolia Creme ── */
-  --cream:         #faf7f2;
-  --cream-warm:    #f5f0e8;
-  --cream-deep:    #ede6d8;
+  --cream:         #fdfcf9;
+  --cream-warm:    #f8f4ed;
+  --cream-deep:    #ede9df;
 
   /* ── Navigation ── */
   --nav:           #1e3d33;
@@ -230,7 +230,7 @@ body{
   border-bottom:1px solid var(--nav-border);
 }
 .card-head.gradient{
-  background:linear-gradient(135deg,var(--nav),#1a3028);
+  background:var(--nav);
   border-bottom:1px solid var(--nav-border);
 }
 .card-title{font-weight:800;font-size:.9rem;letter-spacing:.01em;}
@@ -429,8 +429,8 @@ body{
 
 /* ── WISHES ── */
 .wish-item{display:flex;flex-direction:column;gap:7px;padding:10px 11px;border-radius:12px;font-size:.82rem;line-height:1.45;margin-bottom:6px;border:1px solid transparent;}
-.wish-item.him{background:linear-gradient(135deg,var(--jade-soft),var(--jade-mist));border-color:rgba(74,140,122,.15);}
-.wish-item.her{background:linear-gradient(135deg,var(--gold-soft),var(--gold-mist));border-color:rgba(200,169,110,.2);}
+.wish-item.him{background:var(--jade-soft);border-color:rgba(74,140,122,.12);}
+.wish-item.her{background:var(--gold-soft);border-color:rgba(200,169,110,.18);}
 .wish-item-top{display:flex;align-items:flex-start;gap:7px;}
 .wish-txt{flex:1;}
 .wish-del{font-size:.68rem;color:var(--border);cursor:pointer;padding:2px 4px;border-radius:4px;flex-shrink:0;}
@@ -447,8 +447,8 @@ body{
 .rule-item{
   display:flex;align-items:center;gap:7px;
   padding:9px 11px;border-radius:10px;
-  background:linear-gradient(135deg,var(--both-soft),#f5faf5);
-  border:1px solid rgba(90,122,96,.15);
+  background:var(--cream);
+  border:1px solid var(--border);
   font-size:.82rem;margin-bottom:6px;
 }
 .rule-txt{flex:1;}
@@ -699,6 +699,128 @@ body{
 
 /* ── MISC ── */
 .empty{text-align:center;padding:16px 12px;color:var(--muted);font-size:.79rem;font-style:italic;letter-spacing:.01em;}
+
+/* ── LIEBES-NOTIZ POPUP ── */
+.love-overlay{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(14,24,18,.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:24px;
+}
+.love-overlay.open{display:flex;}
+.love-box{
+  background:var(--card);border-radius:24px;
+  padding:32px 26px;width:100%;max-width:360px;
+  text-align:center;
+  box-shadow:0 12px 48px rgba(14,24,18,.3);
+  border:1px solid var(--border);
+  border-top:3px solid var(--gold);
+  animation:popIn .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+.love-from{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:12px;}
+.love-emoji{font-size:2.6rem;margin-bottom:10px;}
+.love-msg{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.35rem;font-weight:600;font-style:italic;
+  color:var(--jade-deep);line-height:1.5;
+  margin-bottom:20px;letter-spacing:.01em;
+}
+.love-close{
+  padding:10px 24px;border-radius:99px;border:none;
+  background:linear-gradient(135deg,var(--jade-deep),var(--jade));
+  color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.84rem;
+  cursor:pointer;box-shadow:0 3px 12px rgba(74,140,122,.3);
+  letter-spacing:.02em;
+}
+.love-write-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:99px;
+  border:1.5px solid var(--gold);
+  background:var(--gold-soft);color:var(--gold-deep);
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.74rem;
+  cursor:pointer;transition:all .15s;letter-spacing:.02em;
+  margin:0 auto;
+}
+.love-write-btn:active{background:var(--gold);color:#fff;}
+
+/* ── ABEND-RITUAL ── */
+.ritual-overlay{
+  display:none;position:fixed;inset:0;z-index:750;
+  background:rgba(14,24,18,.65);backdrop-filter:blur(7px);
+  align-items:center;justify-content:center;padding:24px;
+}
+.ritual-overlay.open{display:flex;}
+.ritual-box{
+  background:var(--card);border-radius:24px;
+  padding:28px 22px;width:100%;max-width:380px;
+  box-shadow:0 12px 48px rgba(14,24,18,.28);
+  border:1px solid var(--border);border-top:3px solid var(--jade-light);
+  animation:slideUp .3s cubic-bezier(.4,0,.2,1) both;
+}
+.ritual-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--jade-deep);margin-bottom:4px;letter-spacing:.02em;}
+.ritual-sub{font-size:.78rem;color:var(--muted);margin-bottom:20px;font-style:italic;}
+.ritual-q{
+  font-size:.84rem;font-weight:700;color:var(--text);
+  margin-bottom:7px;display:flex;align-items:center;gap:6px;
+}
+.ritual-inp{
+  width:100%;padding:10px 13px;
+  border:1.5px solid var(--border);border-radius:11px;
+  font-family:'Nunito',sans-serif;font-size:.84rem;
+  background:var(--cream);color:var(--text);outline:none;
+  margin-bottom:14px;transition:border-color .15s;resize:none;
+}
+.ritual-inp:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(74,140,122,.1);}
+.ritual-prev{
+  background:var(--jade-soft);border-radius:11px;
+  padding:11px 13px;margin-bottom:16px;
+  border:1px solid rgba(74,140,122,.15);
+}
+.ritual-prev-label{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--jade);margin-bottom:5px;}
+.ritual-prev-text{font-size:.82rem;color:var(--text);font-style:italic;line-height:1.45;}
+.ritual-save{
+  width:100%;padding:13px;border-radius:11px;border:none;
+  background:linear-gradient(135deg,var(--jade-deep),var(--jade));
+  color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.86rem;
+  cursor:pointer;box-shadow:0 3px 12px rgba(74,140,122,.3);
+}
+
+/* ── STREAK ── */
+.streak-tile{
+  background:var(--card);border-radius:18px;
+  padding:18px 16px;margin-bottom:12px;
+  box-shadow:var(--sh);border:1px solid var(--border);
+  text-align:center;
+}
+.streak-plant{font-size:3rem;margin-bottom:6px;display:block;line-height:1;}
+.streak-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--jade);}
+.streak-lbl{font-size:.76rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+.streak-bar-wrap{height:6px;border-radius:99px;background:var(--cream-warm);margin:10px 0 6px;overflow:hidden;border:1px solid var(--border);}
+.streak-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--jade-deep),var(--jade));transition:width .6s cubic-bezier(.4,0,.2,1);}
+.streak-next{font-size:.73rem;color:var(--muted);font-style:italic;}
+
+/* ── DATEN ── */
+.date-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-bottom:1px solid var(--border);
+}
+.date-item:last-child{border-bottom:none;}
+.date-icon{font-size:1.3rem;flex-shrink:0;}
+.date-info{flex:1;}
+.date-name{font-size:.86rem;font-weight:700;}
+.date-when{font-size:.73rem;color:var(--muted);margin-top:2px;}
+.date-soon{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:99px;}
+.date-soon.today{background:var(--jade-soft);color:var(--jade-deep);}
+.date-soon.week{background:var(--gold-soft);color:var(--gold-deep);}
+.date-soon.month{background:var(--cream-warm);color:var(--muted);}
+.date-add-row{padding:10px 14px 12px;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--cream);}
+
+/* ── VERBUNDENHEIT PAGE ── */
+.verbund-section{margin-bottom:4px;}
+.verbund-section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;font-weight:700;color:var(--jade-deep);
+  margin-bottom:3px;margin-top:8px;letter-spacing:.02em;
+}
 </style>
 </head>
 <body>
@@ -772,7 +894,10 @@ body{
       </div>
       <div id="taskCols"></div>
       <div class="reset-row">
-        <button class="reset-btn" onclick="resetWeek()">🔄 Woche abschließen & archivieren</button>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+  <button class="reset-btn" onclick="resetWeek(true)">📁 Archivieren & neu starten</button>
+  <button class="reset-btn" style="border-color:var(--muted);color:var(--muted);" onclick="resetWeek(false)">🔄 Nur neu starten</button>
+</div>
       </div>
     </div>
 
@@ -886,6 +1011,87 @@ body{
     </div>
 
     <!-- STREIT -->
+
+    <!-- HERZ TAB -->
+    <div class="page" id="page-herz">
+      <div class="section-title">💚 Unser Herz</div>
+      <div class="section-sub">Verbundenheit · Rituale · Momente</div>
+
+      <!-- STREAK -->
+      <div class="verbund-section">
+        <div class="verbund-section-title">🏆 Gemeinsame Streak</div>
+      </div>
+      <div class="streak-tile">
+        <span class="streak-plant" id="streakPlant">🌱</span>
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-lbl">faire Wochen in Folge</div>
+        <div class="streak-bar-wrap"><div class="streak-bar" id="streakBar" style="width:0%"></div></div>
+        <div class="streak-next" id="streakNext">Schließt eine faire Woche ab um zu starten</div>
+      </div>
+
+      <!-- LIEBES-NOTIZ schreiben -->
+      <div class="verbund-section">
+        <div class="verbund-section-title">💌 Liebes-Notiz</div>
+      </div>
+      <div class="card">
+        <div class="card-head both"><span>💌</span><span class="card-title both">Geheime Nachricht hinterlassen</span></div>
+        <div style="padding:14px;">
+          <p style="font-size:.82rem;color:var(--muted);font-style:italic;margin-bottom:14px;line-height:1.5;">
+            Deine Nachricht erscheint beim nächsten Öffnen der App als Überraschung für den anderen. ✨
+          </p>
+          <textarea class="ritual-inp" id="loveWriteInp" placeholder="Schreib etwas Schönes…" rows="3" style="margin-bottom:10px;"></textarea>
+          <div style="display:flex;gap:8px;">
+            <select class="modal-sel" id="loveFromWho" style="flex:0 0 auto;width:110px;">
+              <option value="him">♍ Von ihm</option>
+              <option value="her">♋ Von ihr</option>
+            </select>
+            <button onclick="sendLoveNote()" style="flex:1;padding:11px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--jade-deep),var(--jade));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.84rem;cursor:pointer;">💌 Absenden</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABEND-RITUAL Einstellungen -->
+      <div class="verbund-section">
+        <div class="verbund-section-title">🌙 Abend-Ritual</div>
+      </div>
+      <div class="card">
+        <div class="card-head both"><span>🌙</span><span class="card-title both">Tägliches Check-in</span></div>
+        <div style="padding:14px;">
+          <p style="font-size:.82rem;color:var(--muted);font-style:italic;margin-bottom:14px;line-height:1.5;">
+            Jeden Abend zwei Fragen — eine für jeden. Verbindet euch auch an langen Tagen.
+          </p>
+          <div class="notif-row" style="margin-bottom:8px;">
+            <div style="flex:1;"><div class="settings-row-label">Ritual aktivieren</div></div>
+            <label class="notif-toggle">
+              <input type="checkbox" id="ritualEnabled" onchange="toggleRitual()">
+              <span class="notif-slider"></span>
+            </label>
+          </div>
+          <div class="notif-row" id="ritualTimeRow" style="display:none;">
+            <div style="flex:1;"><div class="settings-row-label">Uhrzeit</div></div>
+            <input type="time" class="notif-time-inp" id="ritualTime" value="21:00" onchange="saveRitualTime()">
+          </div>
+        </div>
+      </div>
+
+      <!-- DATEN-ERINNERUNGEN -->
+      <div class="verbund-section">
+        <div class="verbund-section-title">📅 Besondere Daten</div>
+      </div>
+      <div class="card">
+        <div class="card-head both"><span>🗓️</span><span class="card-title both">Jahrestage & Geburtstage</span></div>
+        <div id="dateList"></div>
+        <div class="date-add-row">
+          <input class="inp" id="dateNameInp" placeholder="Name (z.B. Jahrestag)" style="flex:1;min-width:120px;">
+          <input type="date" class="inp" id="dateDateInp" style="flex:0 0 auto;width:140px;">
+          <select class="sel" id="dateIconInp" style="width:54px;">
+            <option>💑</option><option>🎂</option><option>🌹</option><option>✨</option><option>🎉</option><option>💍</option>
+          </select>
+          <button onclick="addDate()" style="padding:9px 12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--jade-deep),var(--jade));color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;font-family:'Nunito',sans-serif;">+</button>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="page-streit">
       <div class="section-title">🕊️ Streit-Protokoll</div>
       <div class="section-sub">Einprägen — nicht erst im Streit öffnen</div>
@@ -955,8 +1161,8 @@ body{
           <div style="flex:1;"><div class="settings-row-label">Firebase neu einrichten</div><div class="settings-row-sub">Database URL ändern</div></div>
           <span style="color:var(--muted);font-size:.8rem;">›</span>
         </div>
-        <div class="settings-row" onclick="resetWeek()" style="cursor:pointer;border-left:3px solid var(--gold);">
-          <div style="flex:1;"><div class="settings-row-label">Woche abschließen</div><div class="settings-row-sub">Archivieren & neu starten</div></div>
+        <div class="settings-row" onclick="resetWeek(true)" style="cursor:pointer;border-left:3px solid var(--gold);">
+          <div style="flex:1;"><div class="settings-row-label">Woche abschließen</div><div class="settings-row-sub">Neu starten — mit oder ohne Archiv</div></div>
           <span style="color:var(--muted);font-size:.8rem;">›</span>
         </div>
       </div>
@@ -970,6 +1176,7 @@ body{
     <button class="nav-btn" onclick="goPage('wuensche',this)"><span class="icon">💬</span>Wünsche</button>
     <button class="nav-btn" onclick="goPage('stats',this)"><span class="icon">📊</span>Statistik</button>
     <button class="nav-btn" onclick="goPage('archiv',this)"><span class="icon">📁</span>Archiv</button>
+    <button class="nav-btn" onclick="goPage('herz',this)"><span class="icon">💚</span>Herz</button>
     <button class="nav-btn" onclick="goPage('streit',this)"><span class="icon">🕊️</span>Mehr</button>
   </nav>
 </div>
@@ -1046,6 +1253,32 @@ body{
   </div>
 </div>
 
+
+<!-- LIEBES-NOTIZ POPUP -->
+<div class="love-overlay" id="loveOverlay" onclick="if(event.target===this)closeLove()">
+  <div class="love-box">
+    <div class="love-from" id="loveFrom">Eine Nachricht für dich</div>
+    <div class="love-emoji">💌</div>
+    <div class="love-msg" id="loveMsg">…</div>
+    <button class="love-close" onclick="closeLove()">Mit Liebe empfangen 💚</button>
+  </div>
+</div>
+
+<!-- ABEND-RITUAL POPUP -->
+<div class="ritual-overlay" id="ritualOverlay">
+  <div class="ritual-box">
+    <div class="ritual-title">🌙 Abend-Ritual</div>
+    <div class="ritual-sub" id="ritualSubtitle">Wie war dein Tag?</div>
+    <div id="ritualPartnerAnswer"></div>
+    <div class="ritual-q">✏️ <span id="ritualQ1">Was war heute schön für dich?</span></div>
+    <textarea class="ritual-inp" id="ritualAns1" placeholder="Deine Antwort…" rows="2"></textarea>
+    <div class="ritual-q">🙏 <span id="ritualQ2">Was brauchst du morgen von mir?</span></div>
+    <textarea class="ritual-inp" id="ritualAns2" placeholder="Deine Antwort…" rows="2"></textarea>
+    <button class="ritual-save" onclick="saveRitual()">✓ Absenden</button>
+    <button onclick="document.getElementById('ritualOverlay').classList.remove('open')" style="width:100%;margin-top:8px;padding:11px;border-radius:11px;border:1.5px solid var(--border);background:none;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;font-size:.84rem;cursor:pointer;">Später</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- COMMENT MODAL -->
@@ -1078,6 +1311,21 @@ const DAYS      = ['Mo','Di','Mi','Do','Fr','Sa','So'];
 const TODAY_KEY = ['So','Mo','Di','Mi','Do','Fr','Sa'][new Date().getDay()];
 const DAY_ORDER = {Mo:0,Di:1,Mi:2,Do:3,Fr:4,Sa:5,So:6};
 const EMOJIS    = ['💙','🙏','✨','🌿','💬','🤝','💡','🌸','⭐','🫶'];
+const RITUAL_QUESTIONS = [
+  ['Was war heute schön für dich?', 'Was brauchst du morgen von mir?'],
+  ['Wofür bist du heute dankbar?', 'Wie kann ich dich morgen unterstützen?'],
+  ['Was hat dich heute zum Lächeln gebracht?', 'Was wünschst du dir für uns diese Woche?'],
+  ['Welcher Moment heute war besonders?', 'Was kann ich morgen für dich tun?'],
+];
+const STREAK_PLANTS = ['🌱','🌿','🌳','🏡','✨','💚'];
+const STREAK_MSGS = [
+  'Schließt eine faire Woche ab um zu starten',
+  'Super Start — bleibt dran!',
+  'Ihr seid ein starkes Team!',
+  'Tolle Kontinuität — weiter so!',
+  'Beeindruckend — fast ein Monat!',
+  'Außergewöhnlich — ihr seid ein Vorbild!',
+];
 const PRIO_COLORS = {high:'#e74c3c',med:'#f39c12',low:'#27ae60'};
 const COLS = [
   {k:'him', lbl:'Er übernimmt',  ico:'🔵'},
@@ -1165,6 +1413,10 @@ function freshState() {
     templates:  JSON.parse(JSON.stringify(DEF_TEMPLATES)),
     rhythm:     [],
     names:      {him:'Er', her:'Sie'},
+    loveNote:   null,
+    ritual:     {answers:{}},
+    streak:     {count:0, lastWeek:null},
+    dates:      [],
   };
 }
 
@@ -1176,6 +1428,10 @@ function migrate(s) {
   if (!s.tasks)     s.tasks     = {him:[],her:[],both:[]};
   if (!s.rhythm)    s.rhythm    = [];
   if (!s.names)     s.names     = {him:'Er', her:'Sie'};
+  if (!s.loveNote)  s.loveNote  = null;
+  if (!s.ritual)    s.ritual    = {answers:{}};
+  if (!s.streak)    s.streak    = {count:0, lastWeek:null};
+  if (!s.dates)     s.dates     = [];
   return s;
 }
 
@@ -1200,6 +1456,7 @@ function initFirebase(dbUrl) {
       setSyncStatus('ok', 'live ✓');
       useCloud = true;
       renderAll();
+      checkOnLoad();
     }, () => { setSyncStatus('err', 'offline'); if (!S) initLocal(); });
   } catch(e) { setSyncStatus('err', 'Fehler'); initLocal(); }
 }
@@ -1211,6 +1468,7 @@ function initLocal() {
   } catch(e) { S = freshState(); }
   setSyncStatus('local', 'lokal');
   renderAll();
+  checkOnLoad();
 }
 
 function saveState() {
@@ -1495,18 +1753,33 @@ window.closeConfirm = function(ok) {
   confirmCbFn=null;
 };
 
-window.resetWeek = function() {
-  showConfirm('🔄 Woche abschließen?','Die aktuelle Woche wird archiviert und der Rhythmus für die neue Woche geladen.','Archivieren & neu starten', ()=>{
-    const snap={week:getWeekLabel(0),date:new Date().toISOString(),tasks:JSON.parse(JSON.stringify(S.tasks)),weeklyDone:JSON.parse(JSON.stringify(S.weeklyDone||{})),weekly:JSON.parse(JSON.stringify(S.weekly||{}))};
-    if (!S.archive) S.archive=[];
-    S.archive.unshift(snap);
-    if (S.archive.length>12) S.archive=S.archive.slice(0,12);
+window.resetWeek = function(withArchive) {
+  const doArchive = withArchive !== false;
+  const title  = doArchive ? '📁 Archivieren & neu starten?' : '🔄 Nur neu starten?';
+  const body   = doArchive
+    ? 'Die aktuelle Woche wird ins Archiv gespeichert und der Rhythmus für die neue Woche geladen.'
+    : 'Alle Häkchen werden zurückgesetzt und der Rhythmus geladen — ohne Archiveintrag.';
+  const label  = doArchive ? 'Archivieren & starten' : 'Neu starten';
+  showConfirm(title, body, label, ()=>{
+    if (doArchive) {
+      const snap={week:getWeekLabel(0),date:new Date().toISOString(),tasks:JSON.parse(JSON.stringify(S.tasks)),weeklyDone:JSON.parse(JSON.stringify(S.weeklyDone||{})),weekly:JSON.parse(JSON.stringify(S.weekly||{}))};
+      if (!S.archive) S.archive=[];
+      S.archive.unshift(snap);
+      if (S.archive.length>12) S.archive=S.archive.slice(0,12);
+    }
     S.tasks={him:[],her:[],both:[]};
     S.weeklyDone={};
     DAYS.forEach(day=>{ if(S.weekly?.[day]) S.weekly[day]={him:[],her:[],both:[]}; });
+    // Calculate fairness before reset for streak
+    const allT=[...(S.tasks?.him||[]),...(S.tasks?.her||[]),...(S.tasks?.both||[])];
+    const tot=allT.length, doneT=allT.filter(t=>t.done).length;
+    const fairPct=tot>0?Math.round(((( S.tasks?.him||[]).filter(t=>t.done).length+((S.tasks?.both||[]).filter(t=>t.done).length)*.5)/doneT)*100):50;
+    const wasFair = tot>0 && Math.abs(fairPct-50)<28;
+    if (doArchive) updateStreak(wasFair);
     applyRhythm();
     prevDoneAll=false;
-    saveState(); renderAll(); toast('📁 Woche archiviert & Rhythmus geladen!');
+    saveState(); renderAll();
+    toast(doArchive ? '📁 Woche archiviert & Rhythmus geladen!' : '🔄 Neu gestartet!');
   });
 };
 
@@ -1888,6 +2161,7 @@ window.goPage=function(name,btn){
   document.getElementById('fab').style.display=(name==='aufgaben')?'flex':'none';
   document.getElementById('scrollArea').scrollTo({top:0,behavior:'smooth'});
   if(name==='stats')renderStats();
+  if(name==='herz'){renderStreak();renderDates();}
 };
 
 // ══════════════════════════════════════
@@ -2039,6 +2313,243 @@ function initNotifications() {
 
 // RENDER ALL
 // ══════════════════════════════════════
+
+// ══════════════════════════════════════
+// 💌 LIEBES-NOTIZEN
+// ══════════════════════════════════════
+function checkLoveNote() {
+  if (!S?.loveNote) return;
+  const n = S.loveNote;
+  // Show only if note is for the "other" — we show it to everyone (both see it)
+  const names = getNames();
+  const fromName = n.from === 'him' ? names.him : names.her;
+  document.getElementById('loveFrom').textContent = '💌 Von ' + fromName + ' — für dich';
+  document.getElementById('loveMsg').textContent = n.msg;
+  document.getElementById('loveOverlay').classList.add('open');
+}
+
+window.closeLove = function() {
+  document.getElementById('loveOverlay').classList.remove('open');
+  // Mark as read — remove note so it shows only once
+  S.loveNote = null;
+  saveState();
+};
+
+window.sendLoveNote = function() {
+  const msg = document.getElementById('loveWriteInp').value.trim();
+  if (!msg) { toast('✏️ Bitte eine Nachricht schreiben'); return; }
+  const from = document.getElementById('loveFromWho').value;
+  S.loveNote = { msg, from, ts: Date.now() };
+  document.getElementById('loveWriteInp').value = '';
+  saveState();
+  toast('💌 Nachricht hinterlegt — wartet auf den anderen!');
+};
+
+// ══════════════════════════════════════
+// 🌙 ABEND-RITUAL
+// ══════════════════════════════════════
+
+function initRitualUI() {
+  const enabled = localStorage.getItem('ritualEnabled') === 'true';
+  const time    = localStorage.getItem('ritualTime') || '21:00';
+  const toggle  = document.getElementById('ritualEnabled');
+  const timeRow = document.getElementById('ritualTimeRow');
+  const timeInp = document.getElementById('ritualTime');
+  if (!toggle) return;
+  toggle.checked = enabled;
+  if (timeInp) timeInp.value = time;
+  if (timeRow) timeRow.style.display = enabled ? 'flex' : 'none';
+}
+
+window.toggleRitual = function() {
+  const toggle  = document.getElementById('ritualEnabled');
+  const timeRow = document.getElementById('ritualTimeRow');
+  localStorage.setItem('ritualEnabled', toggle.checked);
+  if (timeRow) timeRow.style.display = toggle.checked ? 'flex' : 'none';
+  if (toggle.checked) { scheduleRitual(); toast('🌙 Abend-Ritual aktiviert'); }
+  else toast('Abend-Ritual deaktiviert');
+};
+
+window.saveRitualTime = function() {
+  const t = document.getElementById('ritualTime').value;
+  localStorage.setItem('ritualTime', t);
+  scheduleRitual();
+  toast('🌙 Ritual auf ' + t + ' Uhr gesetzt');
+};
+
+function scheduleRitual() {
+  if (localStorage.getItem('ritualEnabled') !== 'true') return;
+  const time = localStorage.getItem('ritualTime') || '21:00';
+  const p = time.split(':');
+  const now = new Date(), next = new Date();
+  next.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
+  if (next <= now) next.setDate(next.getDate() + 1);
+  if (window._ritualTimer) clearTimeout(window._ritualTimer);
+  window._ritualTimer = setTimeout(() => {
+    openRitual();
+    window._ritualInterval = setInterval(openRitual, 24*60*60*1000);
+  }, next - now);
+}
+
+function openRitual() {
+  const names = getNames();
+  const today = new Date().toISOString().slice(0,10);
+  // Pick question pair based on day of week
+  const qs = RITUAL_QUESTIONS[new Date().getDay() % RITUAL_QUESTIONS.length];
+  document.getElementById('ritualSubtitle').textContent = '✨ ' + today;
+  document.getElementById('ritualQ1').textContent = qs[0];
+  document.getElementById('ritualQ2').textContent = qs[1];
+  // Show partner's last answers if available
+  const ritual = S?.ritual || {};
+  const partnerAnswers = ritual.answers || {};
+  const prevDiv = document.getElementById('ritualPartnerAnswer');
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+  const yd = yesterday.toISOString().slice(0,10);
+  const prev = partnerAnswers[yd];
+  if (prev) {
+    prevDiv.innerHTML = '<div class="ritual-prev"><div class="ritual-prev-label">✨ Gestern vom anderen</div>' +
+      '<div class="ritual-prev-text">' + (prev.a1||'') + '</div>' +
+      (prev.a2 ? '<div class="ritual-prev-text" style="margin-top:5px;">→ ' + prev.a2 + '</div>' : '') +
+      '</div>';
+  } else {
+    prevDiv.innerHTML = '';
+  }
+  document.getElementById('ritualAns1').value = '';
+  document.getElementById('ritualAns2').value = '';
+  document.getElementById('ritualOverlay').classList.add('open');
+}
+
+window.saveRitual = function() {
+  const a1 = document.getElementById('ritualAns1').value.trim();
+  const a2 = document.getElementById('ritualAns2').value.trim();
+  if (!a1) { toast('✏️ Bitte mindestens die erste Frage beantworten'); return; }
+  if (!S.ritual) S.ritual = { answers: {} };
+  if (!S.ritual.answers) S.ritual.answers = {};
+  const today = new Date().toISOString().slice(0,10);
+  S.ritual.answers[today] = { a1, a2, ts: Date.now() };
+  // Keep only last 14 days
+  const keys = Object.keys(S.ritual.answers).sort().slice(-14);
+  const trimmed = {};
+  keys.forEach(k => trimmed[k] = S.ritual.answers[k]);
+  S.ritual.answers = trimmed;
+  saveState();
+  document.getElementById('ritualOverlay').classList.remove('open');
+  toast('🌙 Ritual gespeichert — bis morgen!');
+};
+
+// ══════════════════════════════════════
+// 🏆 STREAK
+// ══════════════════════════════════════
+
+function renderStreak() {
+  const streak = S?.streak || { count: 0, lastWeek: null };
+  const count  = streak.count || 0;
+  const plant  = STREAK_PLANTS[Math.min(Math.floor(count/2), STREAK_PLANTS.length-1)];
+  const nextIn = count > 0 ? (2 - (count % 2)) + (count % 2 === 0 ? 0 : 0) : 1;
+  const pct    = Math.min((count % 4) / 4 * 100, 100);
+  const el_p   = document.getElementById('streakPlant');
+  const el_n   = document.getElementById('streakNum');
+  const el_b   = document.getElementById('streakBar');
+  const el_t   = document.getElementById('streakNext');
+  if (!el_p) return;
+  el_p.textContent = plant;
+  el_n.textContent = count;
+  if (el_b) el_b.style.width = pct + '%';
+  if (el_t) {
+    const msgIdx = Math.min(Math.floor(count/2), STREAK_MSGS.length-1);
+    el_t.textContent = count === 0 ? STREAK_MSGS[0] : STREAK_MSGS[msgIdx];
+  }
+}
+
+function updateStreak(wasFair) {
+  if (!S.streak) S.streak = { count: 0, lastWeek: null };
+  const thisWeek = getWeekLabel(0);
+  if (S.streak.lastWeek === thisWeek) return; // already counted
+  if (wasFair) {
+    S.streak.count = (S.streak.count || 0) + 1;
+  } else {
+    S.streak.count = 0; // reset on unfair week
+  }
+  S.streak.lastWeek = thisWeek;
+}
+
+// ══════════════════════════════════════
+// 📅 DATEN-ERINNERUNGEN
+// ══════════════════════════════════════
+function daysUntil(dateStr) {
+  const now   = new Date(); now.setHours(0,0,0,0);
+  const parts = dateStr.split('-');
+  const next  = new Date(now.getFullYear(), parseInt(parts[1])-1, parseInt(parts[2]));
+  if (next < now) next.setFullYear(now.getFullYear()+1);
+  return Math.round((next - now) / 86400000);
+}
+
+function renderDates() {
+  const el = document.getElementById('dateList');
+  if (!el) return;
+  const dates = (S?.dates || []).map(d => ({...d, days: daysUntil(d.date)}))
+    .sort((a,b) => a.days - b.days);
+  if (dates.length === 0) {
+    el.innerHTML = '<div class="empty">Noch keine Daten eingetragen</div>';
+    return;
+  }
+  el.innerHTML = dates.map((d,i) => {
+    let badge = '';
+    if (d.days === 0) badge = '<span class="date-soon today">Heute! 🎉</span>';
+    else if (d.days <= 7) badge = '<span class="date-soon week">in ' + d.days + ' Tagen</span>';
+    else if (d.days <= 30) badge = '<span class="date-soon month">in ' + d.days + ' Tagen</span>';
+    const fmt = new Date(new Date().getFullYear(), parseInt(d.date.split('-')[1])-1, parseInt(d.date.split('-')[2]))
+      .toLocaleDateString('de-DE',{day:'2-digit',month:'long'});
+    return '<div class="date-item">' +
+      '<span class="date-icon">' + d.icon + '</span>' +
+      '<div class="date-info"><div class="date-name">' + d.name + '</div>' +
+      '<div class="date-when">' + fmt + '</div></div>' +
+      badge +
+      '<span class="del-btn" onclick="delDate(' + i + ')">✕</span>' +
+      '</div>';
+  }).join('');
+}
+
+window.addDate = function() {
+  const name = document.getElementById('dateNameInp').value.trim();
+  const date = document.getElementById('dateDateInp').value;
+  const icon = document.getElementById('dateIconInp').value;
+  if (!name || !date) { toast('⚠️ Bitte Name und Datum eingeben'); return; }
+  if (!S.dates) S.dates = [];
+  // Store only month-day (year-agnostic recurring)
+  const mmdd = date.slice(5); // MM-DD
+  S.dates.push({ name, date: '2000-' + mmdd, icon });
+  document.getElementById('dateNameInp').value = '';
+  document.getElementById('dateDateInp').value = '';
+  saveState(); renderDates(); toast('📅 ' + name + ' gespeichert');
+};
+
+window.delDate = function(i) {
+  if (!S.dates) return;
+  S.dates.splice(i,1);
+  saveState(); renderDates();
+};
+
+// Check for upcoming dates on app open
+function checkUpcomingDates() {
+  if (!S?.dates?.length) return;
+  const today = S.dates.filter(d => daysUntil(d.date) === 0);
+  if (today.length > 0) {
+    setTimeout(() => toast('🎉 Heute: ' + today.map(d=>d.icon+' '+d.name).join(' & ')), 1800);
+  }
+}
+
+// ══════════════════════════════════════
+// CHECK ON APP LOAD
+// ══════════════════════════════════════
+function checkOnLoad() {
+  setTimeout(() => {
+    checkLoveNote();       // show love popup if pending
+    checkUpcomingDates();  // remind of today's dates
+    if (localStorage.getItem('ritualEnabled') === 'true') scheduleRitual();
+  }, 1200); // slight delay after app loads
+}
+
 function renderAll(){
   applyNames();
   renderTasks();
@@ -2049,7 +2560,10 @@ function renderAll(){
   renderWishes();
   renderRules();
   renderArchive();
-  initNotifications(); // UI sync for notification settings
+  initNotifications();
+  initRitualUI();
+  renderStreak();
+  renderDates();
   if(document.getElementById('page-stats')?.classList.contains('active')) renderStats();
 }
 </script>
