@@ -55,7 +55,7 @@
   --purple-soft:   var(--jade-soft);
 
   /* ── Layout ── */
-  --bg:            #fffff8;
+  --bg:            #fefefe;
   --card:          #ffffff;
   --dark:          var(--nav);
   --nav-bg:        var(--nav);
@@ -84,10 +84,10 @@
 
 /* ── META ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{height:100%;}
+html{height:100%;background:#fefefe;}
 body{
   font-family:'Nunito',sans-serif;
-  background:var(--bg);
+  background:#fefefe !important;
   color:var(--text);
   height:100%;
   overflow:hidden;
@@ -170,6 +170,7 @@ body{
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-y:contain;
   padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px);
+  background:#fefefe;
 }
 .bottom-nav{
   flex-shrink:0;position:fixed;bottom:0;left:0;right:0;z-index:200;
@@ -226,13 +227,16 @@ body{
   border-bottom:2px solid rgba(90,122,96,.16);
 }
 .card-head.dark{
-  background:var(--nav);
-  border-bottom:1px solid var(--nav-border);
+  background:var(--jade-soft);
+  border-bottom:2px solid rgba(74,140,122,.2);
 }
+.card-head.dark .card-title{color:var(--jade-deep) !important;}
 .card-head.gradient{
-  background:var(--nav);
-  border-bottom:2px solid rgba(74,140,122,.4);
+  background:var(--jade-soft);
+  border-bottom:2px solid rgba(74,140,122,.2);
 }
+.card-head.gradient .card-title{color:var(--jade-deep) !important;}
+.card-head.gradient .rhythm-count{background:rgba(74,140,122,.15);color:var(--jade-deep);border-color:rgba(74,140,122,.25);}
 .card-title{font-weight:800;font-size:.9rem;letter-spacing:.01em;}
 .card-title.him{color:var(--jade-deep);}
 .card-title.her{color:var(--gold-deep);}
@@ -962,7 +966,7 @@ body{
         <div class="card-head gradient" style="justify-content:space-between;">
           <div><div class="card-title white" style="display:flex;align-items:center;gap:6px;">🔁 Wöchentlicher Rhythmus</div>
           <div style="font-size:.67rem;color:#aaa;margin-top:2px;">Wird automatisch jede Woche geladen</div></div>
-          <span class="rhythm-count" id="rhythmCount" style="background:rgba(200,169,110,.15);color:#c8a96e;border:1px solid rgba(200,169,110,.3);">0</span>
+          <span class="rhythm-count" id="rhythmCount">0</span>
         </div>
         <div id="rhythmList"></div>
         <div style="padding:10px 13px 12px;border-top:1px solid var(--border);background:var(--bg);">
@@ -2323,22 +2327,56 @@ window.saveNotifTime = function() {
 };
 
 function scheduleNotif() {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  // setTimeout-based notifications only work while app is open (iOS limitation).
+  // We use two strategies:
+  // 1) setTimeout fires notification if app stays open until scheduled time
+  // 2) On every app open, we check if today's notification time has passed
+  //    and hasn't been sent yet → fire immediately
   if (localStorage.getItem('notifEnabled') !== 'true') return;
   const time  = localStorage.getItem('notifTime') || '09:00';
   const parts = time.split(':');
   const hh = parseInt(parts[0]), mm = parseInt(parts[1]);
-  const now   = new Date();
-  const next  = new Date();
-  next.setHours(hh, mm, 0, 0);
-  if (next <= now) next.setDate(next.getDate() + 1);
-  const msUntil = next - now;
+  const now  = new Date();
+  const fire = new Date();
+  fire.setHours(hh, mm, 0, 0);
   if (window._notifTimer) clearTimeout(window._notifTimer);
   if (window._notifInterval) clearInterval(window._notifInterval);
+  if (fire <= now) {
+    // Time already passed today — check if we already fired today
+    const today = now.toISOString().slice(0,10);
+    const lastFired = localStorage.getItem('notifLastFired');
+    if (lastFired !== today) {
+      // Fire now (user just opened app after notification time)
+      setTimeout(fireNotif, 1500);
+      localStorage.setItem('notifLastFired', today);
+    }
+    // Schedule for tomorrow
+    fire.setDate(fire.getDate() + 1);
+  }
+  const msUntil = fire - now;
   window._notifTimer = setTimeout(() => {
+    const today = new Date().toISOString().slice(0,10);
+    localStorage.setItem('notifLastFired', today);
     fireNotif();
-    window._notifInterval = setInterval(fireNotif, 24 * 60 * 60 * 1000);
+    window._notifInterval = setInterval(() => {
+      const today2 = new Date().toISOString().slice(0,10);
+      localStorage.setItem('notifLastFired', today2);
+      fireNotif();
+    }, 24 * 60 * 60 * 1000);
   }, msUntil);
+}
+
+function showInAppOrNotif(title, body) {
+  if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+    new Notification(title, {body, icon:'https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f3e0.png'});
+  } else {
+    // Fallback: prominent in-app toast
+    const el = document.getElementById('toast');
+    el.textContent = '🔔 ' + body;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 6000);
+  }
 }
 
 function fireNotif() {
@@ -2351,15 +2389,15 @@ function fireNotif() {
   const open = myTasks.filter(t => !t.done);
   const allOpen = [...(S.tasks?.him||[]),...(S.tasks?.her||[]),...(S.tasks?.both||[])].filter(t=>!t.done);
   if (allOpen.length === 0) {
-    new Notification('🏠 Unser Zuhause', {body: '🎉 Alle Aufgaben erledigt — ihr seid ein super Team!'});
+    showInAppOrNotif('🏠 Unser Zuhause', '🎉 Alle Aufgaben erledigt — ihr seid ein super Team!');
   } else if (open.length === 0) {
-    new Notification('🏠 Unser Zuhause', {body: '✅ Deine Aufgaben sind alle erledigt!'});
+    showInAppOrNotif('🏠 Unser Zuhause', '✅ Deine Aufgaben sind alle erledigt!');
   } else {
     const myName = myRole ? n[myRole] : null;
     let body = (myName ? myName + ': ' : '') + open.length + ' Aufgabe' + (open.length>1?'n':'') + ' noch offen.';
     const nextTask = open.find(t=>t.day) || open[0];
     if (nextTask) body += ' Nächste: ' + nextTask.n + (nextTask.day ? ' (' + nextTask.day + ')' : '') + '.';
-    new Notification('🏠 Unser Zuhause', {body});
+    showInAppOrNotif('🏠 Unser Zuhause', body);
   }
 }
 
@@ -2446,14 +2484,33 @@ function scheduleRitual() {
   if (localStorage.getItem('ritualEnabled') !== 'true') return;
   const time = localStorage.getItem('ritualTime') || '21:00';
   const p = time.split(':');
-  const now = new Date(), next = new Date();
-  next.setHours(parseInt(p[0]), parseInt(p[1]), 0, 0);
-  if (next <= now) next.setDate(next.getDate() + 1);
+  const hh = parseInt(p[0]), mm = parseInt(p[1]);
+  const now  = new Date();
+  const fire = new Date();
+  fire.setHours(hh, mm, 0, 0);
   if (window._ritualTimer) clearTimeout(window._ritualTimer);
+  if (window._ritualInterval) clearInterval(window._ritualInterval);
+  if (fire <= now) {
+    // Time already passed today — check if ritual done today
+    const today = now.toISOString().slice(0,10);
+    const lastRitual = localStorage.getItem('ritualLastShown');
+    if (lastRitual !== today) {
+      setTimeout(openRitual, 2000);
+      localStorage.setItem('ritualLastShown', today);
+    }
+    fire.setDate(fire.getDate() + 1);
+  }
+  const msUntil = fire - now;
   window._ritualTimer = setTimeout(() => {
+    const today = new Date().toISOString().slice(0,10);
+    localStorage.setItem('ritualLastShown', today);
     openRitual();
-    window._ritualInterval = setInterval(openRitual, 24*60*60*1000);
-  }, next - now);
+    window._ritualInterval = setInterval(() => {
+      const today2 = new Date().toISOString().slice(0,10);
+      localStorage.setItem('ritualLastShown', today2);
+      openRitual();
+    }, 24 * 60 * 60 * 1000);
+  }, msUntil);
 }
 
 function openRitual() {
