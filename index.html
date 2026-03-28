@@ -243,9 +243,9 @@ body{
   padding:3px 9px;border-radius:99px;color:#fff;
   letter-spacing:.02em;
 }
-.card-badge.him{background:linear-gradient(135deg,var(--jade-deep),var(--jade));}
-.card-badge.her{background:linear-gradient(135deg,var(--gold-deep),var(--gold));}
-.card-badge.both{background:linear-gradient(135deg,#4a6a50,var(--both));}
+.card-badge.him{background:var(--jade);}
+.card-badge.her{background:var(--gold-deep);}
+.card-badge.both{background:var(--both);}
 
 /* ── TASKS ── */
 .task-list{padding:8px 11px;display:flex;flex-direction:column;gap:6px;}
@@ -780,10 +780,6 @@ body{
     <div class="page" id="page-woche">
       <div class="section-title">📅 Wochenvorbereitung</div>
       <div class="section-sub">Plane die Woche — der Aufgaben-Tab ist die Checkliste.</div>
-      <div class="card">
-        <div class="card-head dark"><span>📋</span><span class="card-title white">Diese Woche</span></div>
-        <div id="weekGrid"></div>
-      </div>
       <!-- RHYTHMUS -->
       <div class="card">
         <div class="card-head gradient" style="justify-content:space-between;">
@@ -1440,7 +1436,7 @@ function renderTasks() {
     card.innerHTML = `
       <div class="card-head ${col.k}">
         <span>${col.ico}</span>
-        <span class="card-title ${col.k}">${whoLabel} übernimmt</span>
+        <span class="card-title ${col.k}">${col.k==='both'?whoLabel+' übernehmen':whoLabel+' übernimmt'}</span>
         <span class="card-badge ${col.k}">${done}/${tot}</span>
       </div>
       <div class="task-list">${rowsHtml}</div>`;
@@ -1519,6 +1515,7 @@ window.resetWeek = function() {
 // ══════════════════════════════════════
 function renderWeekly() {
   const grid = document.getElementById('weekGrid');
+  if (!grid) return; // element removed from DOM — skip
   grid.innerHTML='';
   const weekly = S?.weekly||DEF_WEEKLY;
   DAYS.forEach(day=>{
