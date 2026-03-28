@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1e3d33" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e1812" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#1e4a38">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Unser Zuhause">
@@ -19,6 +20,7 @@
 
 /* ── TOKENS ── */
 :root {
+  color-scheme: light;
   /* Mint — drei Tiefen */
   --mint-900: #1a5c44;   /* dunkel: Nav, starker Text */
   --mint-700: #2d8a68;   /* mittel: Buttons, aktive Elemente */
@@ -78,34 +80,13 @@
 }
 
 /* ── DARK MODE ── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:       #101a14;
-    --surface:  #141e18;
-    --card:     #1a2820;
-    --card-tint:#1c2c22;
-    --nav:      #0e1812;
-    --nav-mid:  #162418;
-    --ink:      #e0ece6;
-    --ink-soft: #bcd4c8;
-    --mist:     #6a8070;
-    --border:   #264030;
-    --border-gold: rgba(201,160,78,.2);
-    --mint-050: #162820;
-    --mint-100: #1e3428;
-    --gold-050: #201a08;
-    --gold-100: #2a2210;
-    --both-soft:#182c20;
-    --sh:       0 1px 3px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25);
-    --sh-md:    0 2px 8px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.28);
-    --sh-lg:    0 8px 32px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.2);
-  }
-}
 
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { height: 100%; background: var(--bg); }
-body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink-soft); height: 100%; overflow: hidden; line-height: 1.5; }
+:root { color-scheme: light only; }
+:root { color-scheme: light only; }
+html { height: 100%; background: #eef8f3 !important; color-scheme: light only; }
+body { font-family: 'Nunito', sans-serif; background: #eef8f3 !important; color: #3a4840 !important; height: 100%; overflow: hidden; line-height: 1.5; }
 
 /* ══════════════════════════════════
    LAYOUT
