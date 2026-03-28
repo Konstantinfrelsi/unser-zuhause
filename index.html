@@ -31,9 +31,9 @@
   --gold-mist:     #fefaf3;
 
   /* ── Magnolia Creme ── */
-  --cream:         #fdfcf9;
-  --cream-warm:    #f8f4ed;
-  --cream-deep:    #ede9df;
+  --cream:         #ffffff;
+  --cream-warm:    #faf7f2;
+  --cream-deep:    #ede6d8;
 
   /* ── Navigation ── */
   --nav:           #1e3d33;
@@ -55,7 +55,7 @@
   --purple-soft:   var(--jade-soft);
 
   /* ── Layout ── */
-  --bg:            var(--cream);
+  --bg:            #fffff8;
   --card:          #ffffff;
   --dark:          var(--nav);
   --nav-bg:        var(--nav);
@@ -231,7 +231,7 @@ body{
 }
 .card-head.gradient{
   background:var(--nav);
-  border-bottom:1px solid var(--nav-border);
+  border-bottom:2px solid rgba(74,140,122,.4);
 }
 .card-title{font-weight:800;font-size:.9rem;letter-spacing:.01em;}
 .card-title.him{color:var(--jade-deep);}
@@ -821,6 +821,38 @@ body{
   font-size:1.15rem;font-weight:700;color:var(--jade-deep);
   margin-bottom:3px;margin-top:8px;letter-spacing:.02em;
 }
+
+/* ── USER SELECTION SCREEN ── */
+#userScreen{
+  position:fixed;inset:0;z-index:1100;
+  background:var(--nav-bg);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:32px 24px;
+}
+#userScreen.hidden{display:none;}
+.user-logo{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:#fff;text-align:center;margin-bottom:6px;letter-spacing:.04em;}
+.user-logo em{color:var(--gold-warm);font-style:italic;}
+.user-sub{font-size:.84rem;color:rgba(255,255,255,.5);text-align:center;margin-bottom:40px;font-style:italic;letter-spacing:.02em;}
+.user-question{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#fff;text-align:center;margin-bottom:28px;letter-spacing:.02em;}
+.user-btns{display:flex;flex-direction:column;gap:14px;width:100%;max-width:320px;}
+.user-btn{
+  padding:18px 24px;border-radius:16px;border:none;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+  cursor:pointer;transition:all .18s;letter-spacing:.02em;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.user-btn.him{
+  background:linear-gradient(135deg,var(--jade-deep),var(--jade));
+  color:#fff;box-shadow:0 6px 24px rgba(74,140,122,.35);
+}
+.user-btn.her{
+  background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+  color:#fff;box-shadow:0 6px 24px rgba(200,169,110,.35);
+}
+.user-btn:active{transform:scale(.97);}
+.user-note{font-size:.74rem;color:rgba(255,255,255,.35);text-align:center;margin-top:20px;font-style:italic;line-height:1.5;max-width:280px;}
+.user-switch{font-size:.72rem;color:rgba(255,255,255,.3);text-align:center;margin-top:12px;cursor:pointer;text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -857,6 +889,26 @@ body{
   </div>
   <button class="setup-save-btn" onclick="saveSetup()">✓ App starten</button>
   <div class="setup-skip" onclick="skipSetup()">Ohne Cloud (nur lokal)</div>
+</div>
+
+
+<!-- USER SELECTION SCREEN -->
+<div id="userScreen" class="hidden">
+  <div class="user-logo">🏠 Unser <em>Zuhause</em></div>
+  <div class="user-sub">Willkommen zurück</div>
+  <div class="user-question" id="userQuestion">Wer bist du?</div>
+  <div class="user-btns">
+    <button class="user-btn him" id="userBtnHim" onclick="selectUser('him')">
+      <span style="font-size:1.3rem;">♍</span>
+      <span id="userLabelHim">Er</span>
+    </button>
+    <button class="user-btn her" id="userBtnHer" onclick="selectUser('her')">
+      <span style="font-size:1.3rem;">♋</span>
+      <span id="userLabelHer">Sie</span>
+    </button>
+  </div>
+  <div class="user-note">Diese Auswahl bleibt auf deinem Gerät gespeichert.<br>Du kannst sie jederzeit unter Einstellungen ändern.</div>
+  <div class="user-switch" onclick="forgetUser()">Anderes Gerät / Nutzer wechseln</div>
 </div>
 
 <!-- ══ APP ══ -->
@@ -1157,6 +1209,10 @@ body{
           </div>
         </div>
       </div>
+        <div class="settings-row" onclick="showUserScreen()" style="cursor:pointer;border-left:3px solid var(--jade-light);">
+          <div style="flex:1;"><div class="settings-row-label">Nutzer wechseln</div><div class="settings-row-sub" id="currentUserLabel">Ich bin: —</div></div>
+          <span style="color:var(--muted);font-size:.8rem;">›</span>
+        </div>
         <div class="settings-row" onclick="showSetup()" style="cursor:pointer;border-left:3px solid var(--jade);">
           <div style="flex:1;"><div class="settings-row-label">Firebase neu einrichten</div><div class="settings-row-sub">Database URL ändern</div></div>
           <span style="color:var(--muted);font-size:.8rem;">›</span>
@@ -2287,17 +2343,22 @@ function scheduleNotif() {
 
 function fireNotif() {
   if (!S) return;
-  const allTasks = [...(S.tasks?.him||[]),...(S.tasks?.her||[]),...(S.tasks?.both||[])];
-  const open = allTasks.filter(t => !t.done);
+  const myRole = getMyRole();
   const n = getNames();
-  if (open.length === 0) {
+  // Personalized: show only own + both tasks if role is set
+  const myTasks   = myRole ? [...(S.tasks?.[myRole]||[]), ...(S.tasks?.both||[])] 
+                            : [...(S.tasks?.him||[]),...(S.tasks?.her||[]),...(S.tasks?.both||[])];
+  const open = myTasks.filter(t => !t.done);
+  const allOpen = [...(S.tasks?.him||[]),...(S.tasks?.her||[]),...(S.tasks?.both||[])].filter(t=>!t.done);
+  if (allOpen.length === 0) {
     new Notification('🏠 Unser Zuhause', {body: '🎉 Alle Aufgaben erledigt — ihr seid ein super Team!'});
+  } else if (open.length === 0) {
+    new Notification('🏠 Unser Zuhause', {body: '✅ Deine Aufgaben sind alle erledigt!'});
   } else {
-    const himOpen = (S.tasks?.him||[]).filter(t=>!t.done).length;
-    const herOpen = (S.tasks?.her||[]).filter(t=>!t.done).length;
-    let body = 'Noch ' + open.length + ' Aufgabe' + (open.length>1?'n':'') + ' offen.';
-    if (himOpen > 0) body += ' ' + n.him + ': ' + himOpen + '.';
-    if (herOpen > 0) body += ' ' + n.her + ': ' + herOpen + '.';
+    const myName = myRole ? n[myRole] : null;
+    let body = (myName ? myName + ': ' : '') + open.length + ' Aufgabe' + (open.length>1?'n':'') + ' noch offen.';
+    const nextTask = open.find(t=>t.day) || open[0];
+    if (nextTask) body += ' Nächste: ' + nextTask.n + (nextTask.day ? ' (' + nextTask.day + ')' : '') + '.';
     new Notification('🏠 Unser Zuhause', {body});
   }
 }
@@ -2320,7 +2381,10 @@ function initNotifications() {
 function checkLoveNote() {
   if (!S?.loveNote) return;
   const n = S.loveNote;
-  // Show only if note is for the "other" — we show it to everyone (both see it)
+  const myRole = getMyRole();
+  // Only show to the recipient (the one who did NOT send it)
+  // If user hasn't selected role yet, show to everyone
+  if (myRole && myRole === n.from) return; // sender — don't show to yourself
   const names = getNames();
   const fromName = n.from === 'him' ? names.him : names.her;
   document.getElementById('loveFrom').textContent = '💌 Von ' + fromName + ' — für dich';
@@ -2338,7 +2402,8 @@ window.closeLove = function() {
 window.sendLoveNote = function() {
   const msg = document.getElementById('loveWriteInp').value.trim();
   if (!msg) { toast('✏️ Bitte eine Nachricht schreiben'); return; }
-  const from = document.getElementById('loveFromWho').value;
+  const myRole = getMyRole();
+  const from = myRole || document.getElementById('loveFromWho').value;
   S.loveNote = { msg, from, ts: Date.now() };
   document.getElementById('loveWriteInp').value = '';
   saveState();
@@ -2539,15 +2604,83 @@ function checkUpcomingDates() {
   }
 }
 
+
+// ══════════════════════════════════════
+// 👤 USER SELECTION
+// ══════════════════════════════════════
+// myRole is stored in localStorage (device-specific, not Firebase)
+// Values: 'him' | 'her' | null (not selected yet)
+
+function getMyRole() {
+  return localStorage.getItem('myRole'); // 'him' or 'her'
+}
+
+function showUserScreen() {
+  // Update button labels with actual names
+  const n = getNames();
+  const lh = document.getElementById('userLabelHim');
+  const le = document.getElementById('userLabelHer');
+  const bh = document.getElementById('userBtnHim');
+  const be = document.getElementById('userBtnHer');
+  if (lh) lh.textContent = n.him;
+  if (le) le.textContent = n.her;
+  const role = getMyRole();
+  if (role) {
+    const q = document.getElementById('userQuestion');
+    if (q) q.textContent = 'Du bist gerade: ' + (role === 'him' ? n.him : n.her) + ' — wechseln?';
+  }
+  document.getElementById('userScreen').classList.remove('hidden');
+}
+
+window.selectUser = function(role) {
+  localStorage.setItem('myRole', role);
+  document.getElementById('userScreen').classList.add('hidden');
+  updateCurrentUserLabel();
+  // Update love note send dropdown default
+  const sel = document.getElementById('loveFromWho');
+  if (sel) sel.value = role;
+  // Update notification defaults
+  applyUserRole();
+  toast('✓ Gespeichert als ' + getNames()[role]);
+};
+
+window.forgetUser = function() {
+  localStorage.removeItem('myRole');
+  document.getElementById('userScreen').classList.add('hidden');
+};
+
+function updateCurrentUserLabel() {
+  const el = document.getElementById('currentUserLabel');
+  if (!el) return;
+  const role = getMyRole();
+  const n = getNames();
+  el.textContent = role ? ('Ich bin: ' + (role === 'him' ? n.him : n.her)) : 'Noch nicht ausgewählt';
+}
+
+function applyUserRole() {
+  // Personalize notification text, ritual labels etc.
+  updateCurrentUserLabel();
+}
+
+function checkUserOnLoad() {
+  const role = getMyRole();
+  const n = getNames();
+  if (!role) {
+    // First time — show user selection after a brief moment
+    setTimeout(showUserScreen, 600);
+  }
+}
+
 // ══════════════════════════════════════
 // CHECK ON APP LOAD
 // ══════════════════════════════════════
 function checkOnLoad() {
   setTimeout(() => {
-    checkLoveNote();       // show love popup if pending
+    checkLoveNote();       // show love popup if pending (only to recipient)
     checkUpcomingDates();  // remind of today's dates
     if (localStorage.getItem('ritualEnabled') === 'true') scheduleRitual();
-  }, 1200); // slight delay after app loads
+  }, 1200);
+  checkUserOnLoad(); // show user selection if not set // slight delay after app loads
 }
 
 function renderAll(){
@@ -2564,6 +2697,7 @@ function renderAll(){
   initRitualUI();
   renderStreak();
   renderDates();
+  updateCurrentUserLabel();
   if(document.getElementById('page-stats')?.classList.contains('active')) renderStats();
 }
 </script>
